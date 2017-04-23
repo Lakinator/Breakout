@@ -103,44 +103,42 @@ public class Paddle {
         float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
         if (distanceSquared < (radius * radius)) {
 
+            //TODO: Verschiedene Abprallwinkel von jedem Segment
+
+            float speedX = 0.5f;
+
             ball.setPos(new Vec2f(ball.getPos().x, this.pos.y - ball.getDurchmesser() + 2));
 
             //6 Sektoren
             if (ball.getCenterPos().x > this.pos.x && ball.getCenterPos().x < this.pos.x + (this.size.x*(1.0/6.0))) { //1 Segment Links
 
-                System.out.println("1");
-                if (ball.getSpeed().y*0.5 >= 2.0) ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? ball.getSpeed().x : -ball.getSpeed().x, (float) -(ball.getSpeed().y*0.5)));
-                else ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? ball.getSpeed().x : -ball.getSpeed().x, -ball.getSpeed().y));
+                System.out.println("Hit Segment 1");
+                ball.setSpeed(new Vec2f(-Math.abs(ball.getSpeed().x), -Math.abs(ball.getSpeed().y)));
 
             } else if (ball.getCenterPos().x > this.pos.x + (this.size.x*(1.0/6.0)) && ball.getCenterPos().x < this.pos.x + (this.size.x*(2.0/6.0))) { //2 Segment Links
 
-                System.out.println("2");
-                if (ball.getSpeed().y*0.7 >= 2.0) ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? ball.getSpeed().x : -ball.getSpeed().x, (float) -(ball.getSpeed().y*0.7)));
-                else ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? ball.getSpeed().x : -ball.getSpeed().x, -ball.getSpeed().y));
+                System.out.println("Hit Segment 2");
+                ball.setSpeed(new Vec2f(-Math.abs(ball.getSpeed().x), -Math.abs(ball.getSpeed().y)));
 
             } else if (ball.getCenterPos().x > this.pos.x + (this.size.x*(2.0/6.0)) && ball.getCenterPos().x < this.pos.x + (this.size.x*(3.0/6.0))) { //3 Segment Links
 
-                System.out.println("3");
-                if (ball.getSpeed().y*0.9 >= 2.0) ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? ball.getSpeed().x : -ball.getSpeed().x, (float) -(ball.getSpeed().y*0.9)));
-                else ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? ball.getSpeed().x : -ball.getSpeed().x, -ball.getSpeed().y));
+                System.out.println("Hit Segment 3");
+                ball.setSpeed(new Vec2f(-Math.abs(ball.getSpeed().x), -Math.abs(ball.getSpeed().y)));
 
             } else if (ball.getCenterPos().x > this.pos.x + (this.size.x*(3.0/6.0)) && ball.getCenterPos().x < this.pos.x + (this.size.x*(4.0/6.0))) { //3 Segment Rechts
 
-                System.out.println("4");
-                if (ball.getSpeed().y*0.9 >= 2.0) ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? -ball.getSpeed().x : ball.getSpeed().x, (float) -(ball.getSpeed().y*0.9)));
-                else ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? -ball.getSpeed().x : ball.getSpeed().x, -ball.getSpeed().y));
+                System.out.println("Hit Segment 4");
+                ball.setSpeed(new Vec2f(Math.abs(ball.getSpeed().x), -Math.abs(ball.getSpeed().y)));
 
             } else if (ball.getCenterPos().x > this.pos.x + (this.size.x*(4.0/6.0)) && ball.getCenterPos().x < this.pos.x + (this.size.x*(5.0/6.0))) { //2 Segment Rechts
 
-                System.out.println("5");
-                if (ball.getSpeed().y*0.7 >= 2.0) ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? -ball.getSpeed().x : ball.getSpeed().x, (float) -(ball.getSpeed().y*0.7)));
-                else ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? -ball.getSpeed().x : ball.getSpeed().x, -ball.getSpeed().y));
+                System.out.println("Hit Segment 5");
+                ball.setSpeed(new Vec2f(Math.abs(ball.getSpeed().x), -Math.abs(ball.getSpeed().y)));
 
             } else if (ball.getCenterPos().x > this.pos.x + (this.size.x*(5.0/6.0)) && ball.getCenterPos().x < this.pos.x + this.size.x) { //1 Segment Rechts
 
-                System.out.println("6");
-                if (ball.getSpeed().y*0.5 >= 2.0) ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? -ball.getSpeed().x : ball.getSpeed().x, (float) -(ball.getSpeed().y*0.5)));
-                else ball.setSpeed(new Vec2f(ball.getSpeed().x < 0 ? -ball.getSpeed().x : ball.getSpeed().x, -ball.getSpeed().y));
+                System.out.println("Hit Segment 6");
+                ball.setSpeed(new Vec2f(Math.abs(ball.getSpeed().x), -Math.abs(ball.getSpeed().y)));
 
             }
 
