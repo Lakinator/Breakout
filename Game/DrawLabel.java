@@ -55,9 +55,12 @@ class DrawLabel extends JLabel {
         }
 
         for (Brick brick : bricks) {
-            g2d.setColor(Color.DARK_GRAY);
+            g2d.setColor(brick.getColor());
             g2d.fillRect((int) brick.getPos().x, (int) brick.getPos().y, (int) brick.getSize().x, (int) brick.getSize().y);
         }
+
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("Score: " + Breakout.getScore(), 10, 15);
 
         if (Breakout.getDebug()) {
             for (Line2D line : debugLines) {
