@@ -2,6 +2,8 @@ package Game;
 
 import com.sun.javafx.geom.Vec2f;
 
+import java.awt.*;
+
 /**
  * 14.04.2017
  * Created by user Schalk (Lukas Schalk).
@@ -17,44 +19,6 @@ public class Ball {
         this.speed = new Vec2f();
         resizeBall(frameWidth, frameHeight);
         centerBallPos(frameWidth, frameHeight);
-    }
-
-    public void register(Gui gui) {
-        gui.addBall(this);
-    }
-
-    public void destroy(Gui gui) {
-        gui.removeBall(this);
-    }
-
-
-
-    public void setPos(Vec2f pos) {
-        this.pos = pos;
-    }
-
-    public Vec2f getPos() {
-        return this.pos;
-    }
-
-    public void setSpeed(Vec2f speed) {
-        this.speed = speed;
-    }
-
-    public Vec2f getSpeed() {
-        return this.speed;
-    }
-
-    public void setDurchmesser(int durchmesser) {
-        this.durchmesser = durchmesser;
-    }
-
-    public int getDurchmesser() {
-        return this.durchmesser;
-    }
-
-    public Vec2f getCenterPos() {
-        return new Vec2f(this.pos.x + (this.durchmesser / 2), this.pos.y + (this.durchmesser / 2));
     }
 
     public void resizeBall(int frameWidth, int frameHeight) {
@@ -95,7 +59,7 @@ public class Ball {
             speed.x *= -1;
         }
 
-        if (pos.x + (durchmesser *1.2) > frameWidth) {
+        if (pos.x + (durchmesser * 1.2) > frameWidth) {
             speed.x *= -1;
         }
 
@@ -103,8 +67,9 @@ public class Ball {
             speed.y *= -1;
         }
 
-        if (pos.y + (durchmesser *2) > frameHeight - frameHeight/18) {
-            //Scored
+        if (pos.y + (durchmesser * 2) > frameHeight - frameHeight/18) {
+            //Leben verloren
+            Breakout.setScore(Breakout.getScore() > 100 ? Breakout.getScore() - 100 : 0);
             this.centerBallPos(frameWidth, frameHeight);
             this.setRandomSpeed();
         }
@@ -135,9 +100,28 @@ public class Ball {
         // If the distance is less than the circle's durchmesser, an intersection occurs
         float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
         if (distanceSquared < (realRadius * realRadius)) {
-            this.speed.set(new Vec2f(this.speed.x, -this.speed.y));
-            brick.destroy(gui);
-            return true;
+
+            //Hit an den Seiten Links und Rechts oder Oben und Unten
+            if (this.getCenterPos().x < brick.getPos().x || this.getCenterPos().x > brick.getPos().x + brick.getSize().x) {
+                this.speed.set(new Vec2f(-this.speed.x, this.speed.y));
+            } else {
+                this.speed.set(new Vec2f(this.speed.x, -this.speed.y));
+            }
+
+
+
+            if (brick.getColor() == Color.BLACK) {
+                brick.setColor(Color.BLUE);
+                Breakout.setScore(Breakout.getScore() + 10);
+            } else if (brick.getColor() == Color.BLUE) {
+                brick.setColor(Color.GREEN);
+                Breakout.setScore(Breakout.getScore() + 20);
+            } else if (brick.getColor() == Color.GREEN) {
+                brick.destroy(gui);
+                Breakout.setScore(Breakout.getScore() + 50);
+                return true;
+            }
+
         }
 
         return false;
@@ -145,6 +129,43 @@ public class Ball {
 
     private float clamp(float val, float min, float max) {
         return Math.max(min, Math.min(max, val));
+    }
+
+    public void register(Gui gui) {
+        gui.addBall(this);
+    }
+
+    public void destroy(Gui gui) {
+        gui.removeBall(this);
+    }
+
+
+    public void setPos(Vec2f pos) {
+        this.pos = pos;
+    }
+
+    public Vec2f getPos() {
+        return this.pos;
+    }
+
+    public void setSpeed(Vec2f speed) {
+        this.speed = speed;
+    }
+
+    public Vec2f getSpeed() {
+        return this.speed;
+    }
+
+    public void setDurchmesser(int durchmesser) {
+        this.durchmesser = durchmesser;
+    }
+
+    public int getDurchmesser() {
+        return this.durchmesser;
+    }
+
+    public Vec2f getCenterPos() {
+        return new Vec2f(this.pos.x + (this.durchmesser / 2), this.pos.y + (this.durchmesser / 2));
     }
 
 }
