@@ -14,7 +14,7 @@ public class Gui {
     private JFrame jf;
     private DrawLabel drawLabel;
 
-    public Gui(String title, int width, int height) {
+    public Gui(String title, int width, int height, boolean fullScreen) {
         jf = new JFrame();
         jf.setTitle(title);
         jf.setSize(width, height);
@@ -22,6 +22,14 @@ public class Gui {
         jf.setLayout(null);
         jf.setLocationRelativeTo(null);
         jf.setResizable(false);
+
+        if (fullScreen) {
+            jf.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            jf.setUndecorated(true);
+        } else {
+            jf.setExtendedState(JFrame.NORMAL);
+            jf.setUndecorated(false);
+        }
 
         drawLabel = new DrawLabel(width, height);
         jf.add(drawLabel);
