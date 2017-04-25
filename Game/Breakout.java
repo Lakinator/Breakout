@@ -16,7 +16,8 @@ import java.util.TimerTask;
 public class Breakout {
     private static boolean debug = false;
     private Gui gui;
-    private Timer timer;
+    private Timer updateTimer, renderTimer;
+    private static final int UPS = 60, MAXFPS = 144;
     private static int score;
     public static Line2D debugLine;
     public static Line2D[] brickDebugLines;
@@ -56,8 +57,10 @@ public class Breakout {
         }
 
 
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        updateTimer = new Timer();
+        renderTimer = new Timer();
+
+        updateTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
 
@@ -72,11 +75,16 @@ public class Breakout {
                 paddle.update();
                 ball.handleCollision((int) gui.getDimensions().x, (int) gui.getDimensions().y, bricks, gui);
                 paddle.handleCollision((int) gui.getDimensions().x, (int) gui.getDimensions().y, ball);
-
-                gui.render();
-
             }
-        }, 0, 15);
+        }, 0, 1000 / UPS);
+
+        renderTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                gui.render();
+            }
+        }, 0, 1000 / MAXFPS);
+
     }
 
     public void stop() {
