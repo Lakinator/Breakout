@@ -30,28 +30,28 @@ public class Ball {
         pos.set( (frameWidth/2) - (durchmesser / 2) , (frameHeight/2) - (durchmesser / 2) );
     }
 
-    public void update() {
-        pos.x += speed.x;
-        pos.y += speed.y;
+    public void update(float timeSinceLastFrame) {
+        pos.x += speed.x * timeSinceLastFrame;
+        pos.y += speed.y * timeSinceLastFrame;
     }
 
     public void setRandomSpeed() {
-        int randX = getRndInteger(-5, 5);
-        while (randX == 0 || randX == 1 || randX == -1 || randX == 2 || randX == -2) {
-            randX = getRndInteger(-5, 5);
+        float randX = getRndInteger(-0.3f, 0.3f);
+        while (randX < 0.1 && randX > -0.1) {
+            randX = getRndInteger(-0.3f, 0.3f);
         }
 
-        int randY = getRndInteger(-5, 5);
-        while (randY == 0 || randY == 1 || randY == -1 || randY == 2 || randY == -2) {
-            randY = getRndInteger(-5, 5);
+        float randY = getRndInteger(-0.3f, 0.3f);
+        while (randY < 0.1 && randY > -0.1) {
+            randY = getRndInteger(-0.3f, 0.3f);
         }
 
         speed.x = randX;
         speed.y = randY;
     }
 
-    private int getRndInteger(int min, int max) {
-        return (int) Math.floor(Math.random() * (max - min + 1) ) + min;
+    private float getRndInteger(float min, float max) {
+        return (float) Math.floor(Math.random() * (max - min + 1) ) + min;
     }
 
     public void handleCollision(int frameWidth, int frameHeight, Brick[] bricks, Gui gui) {
