@@ -62,9 +62,9 @@ public class Paddle {
         size.set(frameWidth/4, frameHeight/18);
     }
 
-    public void update() {
-        if (KeyHandler.isLeftDown()) pos.x -= speedX;
-        if (KeyHandler.isRightDown()) pos.x += speedX;
+    public void update(float timeSinceLastFrame) {
+        if (KeyHandler.isLeftDown()) pos.x -= speedX * timeSinceLastFrame;
+        if (KeyHandler.isRightDown()) pos.x += speedX * timeSinceLastFrame;
     }
 
     public void handleCollision(int frameWidth, int frameHeight, Ball ball) {
