@@ -5,8 +5,6 @@ import com.sun.javafx.geom.Vec2f;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * 14.04.2017
@@ -16,9 +14,8 @@ import java.util.TimerTask;
 public class Breakout {
     private static boolean debug = false;
     private Gui gui;
-    private Timer updateTimer, renderTimer;
-    private static final int UPS = 60, MAXFPS = 144;
     private static int score;
+    private boolean running;
     public static Line2D debugLine;
     public static Line2D[] brickDebugLines;
 
@@ -36,7 +33,7 @@ public class Breakout {
         ball.setRandomSpeed();
         ball.register(gui);
 
-        Paddle paddle = new Paddle((int) gui.getDimensions().x, (int) gui.getDimensions().y, 10);
+        Paddle paddle = new Paddle((int) gui.getDimensions().x, (int) gui.getDimensions().y, 1);
         paddle.register(gui);
 
         Brick[] bricks = setupBricks();
@@ -56,38 +53,39 @@ public class Breakout {
             gui.addDebugLine(debugLine);
         }
 
+        running = true;
 
-        updateTimer = new Timer();
-        renderTimer = new Timer();
+        long lastFrame = System.currentTimeMillis();
 
-        updateTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-
-                int counter = 0;
-                for (Brick b : bricks) {
-                    if (b != null) counter++;
-                }
-                if (counter == 0) stop();
-
-
-                ball.update();
-                paddle.update();
-                ball.handleCollision((int) gui.getDimensions().x, (int) gui.getDimensions().y, bricks, gui);
-                paddle.handleCollision((int) gui.getDimensions().x, (int) gui.getDimensions().y, ball);
+        while (running) {
+            int counter = 0;
+            for (Brick b : bricks) {
+                if (b != null) counter++;
             }
-        }, 0, 1000 / UPS);
+            if (counter == 0) stop();
 
-        renderTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                gui.render();
+
+            long thisFrame = System.currentTimeMillis();
+            float timeSinceLastFrame = thisFrame - lastFrame;
+            lastFrame = thisFrame;
+
+            ball.update(timeSinceLastFrame);
+            paddle.update(timeSinceLastFrame);
+            ball.handleCollision((int) gui.getDimensions().x, (int) gui.getDimensions().y, bricks, gui);
+            paddle.handleCollision((int) gui.getDimensions().x, (int) gui.getDimensions().y, ball);
+            gui.render();
+
+            try {
+                Thread.sleep(15);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }, 0, 1000 / MAXFPS);
+        }
 
     }
 
     public void stop() {
+        running = false;
         gui.reset();
         start();
     }
